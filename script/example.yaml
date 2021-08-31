@@ -1,0 +1,9 @@
+apiVersion: miniproxy.togettoyou.com/v1alpha1
+kind: ProxyRoute
+metadata:
+  name: example-proxyroute
+spec:
+  serviceName: xxx
+  namespace: default
+  port: 80
+  scheme: http

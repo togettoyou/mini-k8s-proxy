@@ -38,45 +38,45 @@ import (
 	rest "k8s.io/client-go/rest"
 )
 
-// RoutesGetter has a method to return a RouteInterface.
+// ProxyRoutesGetter has a method to return a ProxyRouteInterface.
 // A group's client should implement this interface.
-type RoutesGetter interface {
-	Routes(namespace string) RouteInterface
+type ProxyRoutesGetter interface {
+	ProxyRoutes(namespace string) ProxyRouteInterface
 }
 
-// RouteInterface has methods to work with Route resources.
-type RouteInterface interface {
-	Create(ctx context.Context, route *v1alpha1.Route, opts v1.CreateOptions) (*v1alpha1.Route, error)
-	Update(ctx context.Context, route *v1alpha1.Route, opts v1.UpdateOptions) (*v1alpha1.Route, error)
+// ProxyRouteInterface has methods to work with ProxyRoute resources.
+type ProxyRouteInterface interface {
+	Create(ctx context.Context, proxyRoute *v1alpha1.ProxyRoute, opts v1.CreateOptions) (*v1alpha1.ProxyRoute, error)
+	Update(ctx context.Context, proxyRoute *v1alpha1.ProxyRoute, opts v1.UpdateOptions) (*v1alpha1.ProxyRoute, error)
 	Delete(ctx context.Context, name string, opts v1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.Route, error)
-	List(ctx context.Context, opts v1.ListOptions) (*v1alpha1.RouteList, error)
+	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.ProxyRoute, error)
+	List(ctx context.Context, opts v1.ListOptions) (*v1alpha1.ProxyRouteList, error)
 	Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.Route, err error)
-	RouteExpansion
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.ProxyRoute, err error)
+	ProxyRouteExpansion
 }
 
-// routes implements RouteInterface
-type routes struct {
+// proxyRoutes implements ProxyRouteInterface
+type proxyRoutes struct {
 	client rest.Interface
 	ns     string
 }
 
-// newRoutes returns a Routes
-func newRoutes(c *MiniproxyV1alpha1Client, namespace string) *routes {
-	return &routes{
+// newProxyRoutes returns a ProxyRoutes
+func newProxyRoutes(c *MiniproxyV1alpha1Client, namespace string) *proxyRoutes {
+	return &proxyRoutes{
 		client: c.RESTClient(),
 		ns:     namespace,
 	}
 }
 
-// Get takes name of the route, and returns the corresponding route object, and an error if there is any.
-func (c *routes) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.Route, err error) {
-	result = &v1alpha1.Route{}
+// Get takes name of the proxyRoute, and returns the corresponding proxyRoute object, and an error if there is any.
+func (c *proxyRoutes) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.ProxyRoute, err error) {
+	result = &v1alpha1.ProxyRoute{}
 	err = c.client.Get().
 		Namespace(c.ns).
-		Resource("routes").
+		Resource("proxyroutes").
 		Name(name).
 		VersionedParams(&options, scheme.ParameterCodec).
 		Do(ctx).
@@ -84,16 +84,16 @@ func (c *routes) Get(ctx context.Context, name string, options v1.GetOptions) (r
 	return
 }
 
-// List takes label and field selectors, and returns the list of Routes that match those selectors.
-func (c *routes) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1.RouteList, err error) {
+// List takes label and field selectors, and returns the list of ProxyRoutes that match those selectors.
+func (c *proxyRoutes) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1.ProxyRouteList, err error) {
 	var timeout time.Duration
 	if opts.TimeoutSeconds != nil {
 		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
 	}
-	result = &v1alpha1.RouteList{}
+	result = &v1alpha1.ProxyRouteList{}
 	err = c.client.Get().
 		Namespace(c.ns).
-		Resource("routes").
+		Resource("proxyroutes").
 		VersionedParams(&opts, scheme.ParameterCodec).
 		Timeout(timeout).
 		Do(ctx).
@@ -101,8 +101,8 @@ func (c *routes) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha
 	return
 }
 
-// Watch returns a watch.Interface that watches the requested routes.
-func (c *routes) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
+// Watch returns a watch.Interface that watches the requested proxyRoutes.
+func (c *proxyRoutes) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
 	var timeout time.Duration
 	if opts.TimeoutSeconds != nil {
 		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
@@ -110,44 +110,44 @@ func (c *routes) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interfac
 	opts.Watch = true
 	return c.client.Get().
 		Namespace(c.ns).
-		Resource("routes").
+		Resource("proxyroutes").
 		VersionedParams(&opts, scheme.ParameterCodec).
 		Timeout(timeout).
 		Watch(ctx)
 }
 
-// Create takes the representation of a route and creates it.  Returns the server's representation of the route, and an error, if there is any.
-func (c *routes) Create(ctx context.Context, route *v1alpha1.Route, opts v1.CreateOptions) (result *v1alpha1.Route, err error) {
-	result = &v1alpha1.Route{}
+// Create takes the representation of a proxyRoute and creates it.  Returns the server's representation of the proxyRoute, and an error, if there is any.
+func (c *proxyRoutes) Create(ctx context.Context, proxyRoute *v1alpha1.ProxyRoute, opts v1.CreateOptions) (result *v1alpha1.ProxyRoute, err error) {
+	result = &v1alpha1.ProxyRoute{}
 	err = c.client.Post().
 		Namespace(c.ns).
-		Resource("routes").
+		Resource("proxyroutes").
 		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(route).
+		Body(proxyRoute).
 		Do(ctx).
 		Into(result)
 	return
 }
 
-// Update takes the representation of a route and updates it. Returns the server's representation of the route, and an error, if there is any.
-func (c *routes) Update(ctx context.Context, route *v1alpha1.Route, opts v1.UpdateOptions) (result *v1alpha1.Route, err error) {
-	result = &v1alpha1.Route{}
+// Update takes the representation of a proxyRoute and updates it. Returns the server's representation of the proxyRoute, and an error, if there is any.
+func (c *proxyRoutes) Update(ctx context.Context, proxyRoute *v1alpha1.ProxyRoute, opts v1.UpdateOptions) (result *v1alpha1.ProxyRoute, err error) {
+	result = &v1alpha1.ProxyRoute{}
 	err = c.client.Put().
 		Namespace(c.ns).
-		Resource("routes").
-		Name(route.Name).
+		Resource("proxyroutes").
+		Name(proxyRoute.Name).
 		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(route).
+		Body(proxyRoute).
 		Do(ctx).
 		Into(result)
 	return
 }
 
-// Delete takes name of the route and deletes it. Returns an error if one occurs.
-func (c *routes) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
+// Delete takes name of the proxyRoute and deletes it. Returns an error if one occurs.
+func (c *proxyRoutes) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
 	return c.client.Delete().
 		Namespace(c.ns).
-		Resource("routes").
+		Resource("proxyroutes").
 		Name(name).
 		Body(&opts).
 		Do(ctx).
@@ -155,14 +155,14 @@ func (c *routes) Delete(ctx context.Context, name string, opts v1.DeleteOptions)
 }
 
 // DeleteCollection deletes a collection of objects.
-func (c *routes) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
+func (c *proxyRoutes) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
 	var timeout time.Duration
 	if listOpts.TimeoutSeconds != nil {
 		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
 	}
 	return c.client.Delete().
 		Namespace(c.ns).
-		Resource("routes").
+		Resource("proxyroutes").
 		VersionedParams(&listOpts, scheme.ParameterCodec).
 		Timeout(timeout).
 		Body(&opts).
@@ -170,12 +170,12 @@ func (c *routes) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, li
 		Error()
 }
 
-// Patch applies the patch and returns the patched route.
-func (c *routes) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.Route, err error) {
-	result = &v1alpha1.Route{}
+// Patch applies the patch and returns the patched proxyRoute.
+func (c *proxyRoutes) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.ProxyRoute, err error) {
+	result = &v1alpha1.ProxyRoute{}
 	err = c.client.Patch(pt).
 		Namespace(c.ns).
-		Resource("routes").
+		Resource("proxyroutes").
 		Name(name).
 		SubResource(subresources...).
 		VersionedParams(&opts, scheme.ParameterCodec).

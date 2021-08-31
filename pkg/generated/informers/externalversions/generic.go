@@ -61,8 +61,8 @@ func (f *genericInformer) Lister() cache.GenericLister {
 func (f *sharedInformerFactory) ForResource(resource schema.GroupVersionResource) (GenericInformer, error) {
 	switch resource {
 	// Group=miniproxy.togettoyou.com, Version=v1alpha1
-	case v1alpha1.SchemeGroupVersion.WithResource("routes"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Miniproxy().V1alpha1().Routes().Informer()}, nil
+	case v1alpha1.SchemeGroupVersion.WithResource("proxyroutes"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Miniproxy().V1alpha1().ProxyRoutes().Informer()}, nil
 
 	}
 

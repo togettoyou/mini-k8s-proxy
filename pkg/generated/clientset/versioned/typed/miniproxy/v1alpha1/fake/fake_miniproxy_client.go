@@ -37,8 +37,8 @@ type FakeMiniproxyV1alpha1 struct {
 	*testing.Fake
 }
 
-func (c *FakeMiniproxyV1alpha1) Routes(namespace string) v1alpha1.RouteInterface {
-	return &FakeRoutes{c, namespace}
+func (c *FakeMiniproxyV1alpha1) ProxyRoutes(namespace string) v1alpha1.ProxyRouteInterface {
+	return &FakeProxyRoutes{c, namespace}
 }
 
 // RESTClient returns a RESTClient that is used to communicate

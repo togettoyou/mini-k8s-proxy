@@ -40,59 +40,59 @@ import (
 	cache "k8s.io/client-go/tools/cache"
 )
 
-// RouteInformer provides access to a shared informer and lister for
-// Routes.
-type RouteInformer interface {
+// ProxyRouteInformer provides access to a shared informer and lister for
+// ProxyRoutes.
+type ProxyRouteInformer interface {
 	Informer() cache.SharedIndexInformer
-	Lister() v1alpha1.RouteLister
+	Lister() v1alpha1.ProxyRouteLister
 }
 
-type routeInformer struct {
+type proxyRouteInformer struct {
 	factory          internalinterfaces.SharedInformerFactory
 	tweakListOptions internalinterfaces.TweakListOptionsFunc
 	namespace        string
 }
 
-// NewRouteInformer constructs a new informer for Route type.
+// NewProxyRouteInformer constructs a new informer for ProxyRoute type.
 // Always prefer using an informer factory to get a shared informer instead of getting an independent
 // one. This reduces memory footprint and number of connections to the server.
-func NewRouteInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers) cache.SharedIndexInformer {
-	return NewFilteredRouteInformer(client, namespace, resyncPeriod, indexers, nil)
+func NewProxyRouteInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers) cache.SharedIndexInformer {
+	return NewFilteredProxyRouteInformer(client, namespace, resyncPeriod, indexers, nil)
 }
 
-// NewFilteredRouteInformer constructs a new informer for Route type.
+// NewFilteredProxyRouteInformer constructs a new informer for ProxyRoute type.
 // Always prefer using an informer factory to get a shared informer instead of getting an independent
 // one. This reduces memory footprint and number of connections to the server.
-func NewFilteredRouteInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers, tweakListOptions internalinterfaces.TweakListOptionsFunc) cache.SharedIndexInformer {
+func NewFilteredProxyRouteInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers, tweakListOptions internalinterfaces.TweakListOptionsFunc) cache.SharedIndexInformer {
 	return cache.NewSharedIndexInformer(
 		&cache.ListWatch{
 			ListFunc: func(options v1.ListOptions) (runtime.Object, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.MiniproxyV1alpha1().Routes(namespace).List(context.TODO(), options)
+				return client.MiniproxyV1alpha1().ProxyRoutes(namespace).List(context.TODO(), options)
 			},
 			WatchFunc: func(options v1.ListOptions) (watch.Interface, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.MiniproxyV1alpha1().Routes(namespace).Watch(context.TODO(), options)
+				return client.MiniproxyV1alpha1().ProxyRoutes(namespace).Watch(context.TODO(), options)
 			},
 		},
-		&miniproxyv1alpha1.Route{},
+		&miniproxyv1alpha1.ProxyRoute{},
 		resyncPeriod,
 		indexers,
 	)
 }
 
-func (f *routeInformer) defaultInformer(client versioned.Interface, resyncPeriod time.Duration) cache.SharedIndexInformer {
-	return NewFilteredRouteInformer(client, f.namespace, resyncPeriod, cache.Indexers{cache.NamespaceIndex: cache.MetaNamespaceIndexFunc}, f.tweakListOptions)
+func (f *proxyRouteInformer) defaultInformer(client versioned.Interface, resyncPeriod time.Duration) cache.SharedIndexInformer {
+	return NewFilteredProxyRouteInformer(client, f.namespace, resyncPeriod, cache.Indexers{cache.NamespaceIndex: cache.MetaNamespaceIndexFunc}, f.tweakListOptions)
 }
 
-func (f *routeInformer) Informer() cache.SharedIndexInformer {
-	return f.factory.InformerFor(&miniproxyv1alpha1.Route{}, f.defaultInformer)
+func (f *proxyRouteInformer) Informer() cache.SharedIndexInformer {
+	return f.factory.InformerFor(&miniproxyv1alpha1.ProxyRoute{}, f.defaultInformer)
 }
 
-func (f *routeInformer) Lister() v1alpha1.RouteLister {
-	return v1alpha1.NewRouteLister(f.Informer().GetIndexer())
+func (f *proxyRouteInformer) Lister() v1alpha1.ProxyRouteLister {
+	return v1alpha1.NewProxyRouteLister(f.Informer().GetIndexer())
 }

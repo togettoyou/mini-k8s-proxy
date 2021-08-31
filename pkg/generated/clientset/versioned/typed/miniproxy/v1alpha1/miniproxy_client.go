@@ -35,7 +35,7 @@ import (
 
 type MiniproxyV1alpha1Interface interface {
 	RESTClient() rest.Interface
-	RoutesGetter
+	ProxyRoutesGetter
 }
 
 // MiniproxyV1alpha1Client is used to interact with features provided by the miniproxy.togettoyou.com group.
@@ -43,8 +43,8 @@ type MiniproxyV1alpha1Client struct {
 	restClient rest.Interface
 }
 
-func (c *MiniproxyV1alpha1Client) Routes(namespace string) RouteInterface {
-	return newRoutes(c, namespace)
+func (c *MiniproxyV1alpha1Client) ProxyRoutes(namespace string) ProxyRouteInterface {
+	return newProxyRoutes(c, namespace)
 }
 
 // NewForConfig creates a new MiniproxyV1alpha1Client for the given config.
