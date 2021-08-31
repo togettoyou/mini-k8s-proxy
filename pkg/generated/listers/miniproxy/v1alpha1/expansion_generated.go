@@ -26,10 +26,10 @@ SOFTWARE.
 
 package v1alpha1
 
-// MiniProxyListerExpansion allows custom methods to be added to
-// MiniProxyLister.
-type MiniProxyListerExpansion interface{}
+// RouteListerExpansion allows custom methods to be added to
+// RouteLister.
+type RouteListerExpansion interface{}
 
-// MiniProxyNamespaceListerExpansion allows custom methods to be added to
-// MiniProxyNamespaceLister.
-type MiniProxyNamespaceListerExpansion interface{}
+// RouteNamespaceListerExpansion allows custom methods to be added to
+// RouteNamespaceLister.
+type RouteNamespaceListerExpansion interface{}

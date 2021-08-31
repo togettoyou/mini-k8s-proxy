@@ -26,4 +26,4 @@ SOFTWARE.
 
 package v1alpha1
 
-type MiniProxyExpansion interface{}
+type RouteExpansion interface{}

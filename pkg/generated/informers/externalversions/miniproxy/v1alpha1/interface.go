@@ -32,8 +32,8 @@ import (
 
 // Interface provides access to all the informers in this group version.
 type Interface interface {
-	// MiniProxies returns a MiniProxyInformer.
-	MiniProxies() MiniProxyInformer
+	// Routes returns a RouteInformer.
+	Routes() RouteInformer
 }
 
 type version struct {
@@ -47,7 +47,7 @@ func New(f internalinterfaces.SharedInformerFactory, namespace string, tweakList
 	return &version{factory: f, namespace: namespace, tweakListOptions: tweakListOptions}
 }
 
-// MiniProxies returns a MiniProxyInformer.
-func (v *version) MiniProxies() MiniProxyInformer {
-	return &miniProxyInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
+// Routes returns a RouteInformer.
+func (v *version) Routes() RouteInformer {
+	return &routeInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
 }

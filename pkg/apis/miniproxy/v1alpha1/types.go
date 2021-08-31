@@ -8,16 +8,16 @@ import (
 // +genclient
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
-// MiniProxy is a specification for a MiniProxy resource
-type MiniProxy struct {
+// Route is a specification for a Route resource
+type Route struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec MiniProxySpec `json:"spec"`
+	Spec RouteSpec `json:"spec"`
 }
 
-// MiniProxySpec is the spec for a MiniProxy resource
-type MiniProxySpec struct {
+// RouteSpec is the spec for a Route resource
+type RouteSpec struct {
 	ServiceName string             `json:"serviceName"`
 	Namespace   string             `json:"namespace,omitempty"`
 	Port        intstr.IntOrString `json:"port,omitempty"`
@@ -26,10 +26,10 @@ type MiniProxySpec struct {
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
-// MiniProxyList is a list of MiniProxy resources
-type MiniProxyList struct {
+// RouteList is a list of Route resources
+type RouteList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata"`
 
-	Items []MiniProxy `json:"items"`
+	Items []Route `json:"items"`
 }

@@ -34,75 +34,75 @@ import (
 	"k8s.io/client-go/tools/cache"
 )
 
-// MiniProxyLister helps list MiniProxies.
+// RouteLister helps list Routes.
 // All objects returned here must be treated as read-only.
-type MiniProxyLister interface {
-	// List lists all MiniProxies in the indexer.
+type RouteLister interface {
+	// List lists all Routes in the indexer.
 	// Objects returned here must be treated as read-only.
-	List(selector labels.Selector) (ret []*v1alpha1.MiniProxy, err error)
-	// MiniProxies returns an object that can list and get MiniProxies.
-	MiniProxies(namespace string) MiniProxyNamespaceLister
-	MiniProxyListerExpansion
+	List(selector labels.Selector) (ret []*v1alpha1.Route, err error)
+	// Routes returns an object that can list and get Routes.
+	Routes(namespace string) RouteNamespaceLister
+	RouteListerExpansion
 }
 
-// miniProxyLister implements the MiniProxyLister interface.
-type miniProxyLister struct {
+// routeLister implements the RouteLister interface.
+type routeLister struct {
 	indexer cache.Indexer
 }
 
-// NewMiniProxyLister returns a new MiniProxyLister.
-func NewMiniProxyLister(indexer cache.Indexer) MiniProxyLister {
-	return &miniProxyLister{indexer: indexer}
+// NewRouteLister returns a new RouteLister.
+func NewRouteLister(indexer cache.Indexer) RouteLister {
+	return &routeLister{indexer: indexer}
 }
 
-// List lists all MiniProxies in the indexer.
-func (s *miniProxyLister) List(selector labels.Selector) (ret []*v1alpha1.MiniProxy, err error) {
+// List lists all Routes in the indexer.
+func (s *routeLister) List(selector labels.Selector) (ret []*v1alpha1.Route, err error) {
 	err = cache.ListAll(s.indexer, selector, func(m interface{}) {
-		ret = append(ret, m.(*v1alpha1.MiniProxy))
+		ret = append(ret, m.(*v1alpha1.Route))
 	})
 	return ret, err
 }
 
-// MiniProxies returns an object that can list and get MiniProxies.
-func (s *miniProxyLister) MiniProxies(namespace string) MiniProxyNamespaceLister {
-	return miniProxyNamespaceLister{indexer: s.indexer, namespace: namespace}
+// Routes returns an object that can list and get Routes.
+func (s *routeLister) Routes(namespace string) RouteNamespaceLister {
+	return routeNamespaceLister{indexer: s.indexer, namespace: namespace}
 }
 
-// MiniProxyNamespaceLister helps list and get MiniProxies.
+// RouteNamespaceLister helps list and get Routes.
 // All objects returned here must be treated as read-only.
-type MiniProxyNamespaceLister interface {
-	// List lists all MiniProxies in the indexer for a given namespace.
+type RouteNamespaceLister interface {
+	// List lists all Routes in the indexer for a given namespace.
 	// Objects returned here must be treated as read-only.
-	List(selector labels.Selector) (ret []*v1alpha1.MiniProxy, err error)
-	// Get retrieves the MiniProxy from the indexer for a given namespace and name.
+	List(selector labels.Selector) (ret []*v1alpha1.Route, err error)
+	// Get retrieves the Route from the indexer for a given namespace and name.
 	// Objects returned here must be treated as read-only.
-	Get(name string) (*v1alpha1.MiniProxy, error)
-	MiniProxyNamespaceListerExpansion
+	Get(name string) (*v1alpha1.Route, error)
+	RouteNamespaceListerExpansion
 }
 
-// miniProxyNamespaceLister implements the MiniProxyNamespaceLister
+// routeNamespaceLister implements the RouteNamespaceLister
 // interface.
-type miniProxyNamespaceLister struct {
+type routeNamespaceLister struct {
 	indexer   cache.Indexer
 	namespace string
 }
 
-// List lists all MiniProxies in the indexer for a given namespace.
-func (s miniProxyNamespaceLister) List(selector labels.Selector) (ret []*v1alpha1.MiniProxy, err error) {
+// List lists all Routes in the indexer for a given namespace.
+func (s routeNamespaceLister) List(selector labels.Selector) (ret []*v1alpha1.Route, err error) {
 	err = cache.ListAllByNamespace(s.indexer, s.namespace, selector, func(m interface{}) {
-		ret = append(ret, m.(*v1alpha1.MiniProxy))
+		ret = append(ret, m.(*v1alpha1.Route))
 	})
 	return ret, err
 }
 
-// Get retrieves the MiniProxy from the indexer for a given namespace and name.
-func (s miniProxyNamespaceLister) Get(name string) (*v1alpha1.MiniProxy, error) {
+// Get retrieves the Route from the indexer for a given namespace and name.
+func (s routeNamespaceLister) Get(name string) (*v1alpha1.Route, error) {
 	obj, exists, err := s.indexer.GetByKey(s.namespace + "/" + name)
 	if err != nil {
 		return nil, err
 	}
 	if !exists {
-		return nil, errors.NewNotFound(v1alpha1.Resource("miniproxy"), name)
+		return nil, errors.NewNotFound(v1alpha1.Resource("route"), name)
 	}
-	return obj.(*v1alpha1.MiniProxy), nil
+	return obj.(*v1alpha1.Route), nil
 }
