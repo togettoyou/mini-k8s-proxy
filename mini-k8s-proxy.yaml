@@ -28,7 +28,6 @@ spec:
   ports:
     - port: 80
       targetPort: 80
-      nodePort: 32000
   selector:
     app: mini-k8s-proxy
   type: NodePort
