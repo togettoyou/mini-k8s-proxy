@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"k8s.io/apimachinery/pkg/labels"
-	"k8s.io/client-go/tools/clientcmd"
+	"k8s.io/client-go/rest"
 	"log"
 	"mini-k8s-proxy/pkg/apis/miniproxy/v1alpha1"
 	clientset "mini-k8s-proxy/pkg/generated/clientset/versioned"
@@ -57,8 +57,9 @@ func main() {
 	// 采用缓冲大小为 1 的通道方式来处理 CRD 事件
 	eventHandler := &resourceEventHandler{Ev: eventCh}
 
-	// 作为测试，这里直接使用 kubeconfig 连接 k8s
-	cfg, err := clientcmd.BuildConfigFromFlags("", "tmp/config")
+	// 作为测试，这里直接使用 kubeconfig 连接 k8s，实际部署使用 InClusterConfig 模式
+	//cfg, err := clientcmd.BuildConfigFromFlags("", "tmp/config")
+	cfg, err := rest.InClusterConfig()
 	if err != nil {
 		panic(err)
 	}
