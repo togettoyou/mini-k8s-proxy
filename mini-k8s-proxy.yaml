@@ -1,3 +1,38 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: proxyroutes.miniproxy.togettoyou.com
+spec:
+  group: miniproxy.togettoyou.com
+  names:
+    kind: ProxyRoute
+    shortNames:
+      - pr
+    plural: proxyroutes
+    singular: proxyroute
+  scope: Namespaced
+  versions:
+    - name: v1alpha1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                host:
+                  type: string
+                serviceName:
+                  type: string
+                namespace:
+                  type: string
+                port:
+                  type: integer
+                scheme:
+                  type: boolean
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -13,9 +48,8 @@ spec:
         app: mini-k8s-proxy
     spec:
       containers:
-        - name: web
+        - name: mini-k8s-proxy
           image: togettoyou/mini-k8s-proxy:latest
-          imagePullPolicy: Never
           ports:
             - containerPort: 80
 
