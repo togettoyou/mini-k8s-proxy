@@ -17,10 +17,11 @@ type ProxyRoute struct {
 
 // ProxyRouteSpec is the spec for a ProxyRoute resource
 type ProxyRouteSpec struct {
+	Host        string `json:"host"`
 	ServiceName string `json:"serviceName"`
 	Namespace   string `json:"namespace,omitempty"`
 	Port        int32  `json:"port,omitempty"`
-	Scheme      string `json:"scheme,omitempty"`
+	Scheme      bool   `json:"scheme,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

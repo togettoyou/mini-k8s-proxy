@@ -1,18 +1,18 @@
 package main
 
-type ResourceEventHandler struct {
+type resourceEventHandler struct {
 	Ev chan<- interface{}
 }
 
-func (reh *ResourceEventHandler) OnAdd(obj interface{}) {
+func (reh *resourceEventHandler) OnAdd(obj interface{}) {
 	eventHandlerFunc(reh.Ev, obj)
 }
 
-func (reh *ResourceEventHandler) OnUpdate(oldObj, newObj interface{}) {
+func (reh *resourceEventHandler) OnUpdate(oldObj, newObj interface{}) {
 	eventHandlerFunc(reh.Ev, newObj)
 }
 
-func (reh *ResourceEventHandler) OnDelete(obj interface{}) {
+func (reh *resourceEventHandler) OnDelete(obj interface{}) {
 	eventHandlerFunc(reh.Ev, obj)
 }
 

@@ -16,9 +16,9 @@ const resyncPeriod = 10 * time.Minute
 func main() {
 	ctx := context.Background()
 	eventCh := make(chan interface{}, 1)
-	eventHandler := &ResourceEventHandler{Ev: eventCh}
+	eventHandler := &resourceEventHandler{Ev: eventCh}
 
-	// 连接 k8s client
+	// 使用 kubeconfig 连接 k8s client
 	cfg, err := clientcmd.BuildConfigFromFlags("", "tmp/config")
 	if err != nil {
 		panic(err)
@@ -27,12 +27,12 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	// 初始化 k8s Crd Informer
+	// 构建 k8s Crd Informer 实例
 	factoryCrd := externalversions.NewSharedInformerFactoryWithOptions(
 		client,
 		resyncPeriod,
 	)
-	// 注册 Informer 事件处理机制
+	// 注册 Informer 事件处理
 	factoryCrd.Miniproxy().V1alpha1().ProxyRoutes().Informer().AddEventHandler(eventHandler)
 	// 启动 Informer
 	factoryCrd.Start(ctx.Done())
@@ -42,6 +42,7 @@ func main() {
 			panic(fmt.Errorf("timed out waiting for controller caches to sync %s", t.String()))
 		}
 	}
+	go startServer()
 
 	for {
 		select {

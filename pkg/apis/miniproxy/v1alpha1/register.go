@@ -31,6 +31,7 @@ func Resource(resource string) schema.GroupResource {
 // Adds the list of known types to Scheme.
 func addKnownTypes(scheme *runtime.Scheme) error {
 	scheme.AddKnownTypes(SchemeGroupVersion,
+		// 主要在这里导入我们的定制资源对象
 		&ProxyRoute{},
 		&ProxyRouteList{},
 	)

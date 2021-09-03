@@ -3,7 +3,10 @@ kind: ProxyRoute
 metadata:
   name: example-proxyroute
 spec:
-  serviceName: xxx
+  # 监听域名
+  host: whoami.togettoyou.com
+  # 假设你有一个 whomai 的 service，位于 default 命名空间，容器内部端口为 80 ，http 协议
+  serviceName: whoami
   namespace: default
   port: 80
-  scheme: http
+  scheme: false
